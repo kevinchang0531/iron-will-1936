@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#14171c">
+  <title>鋼鐵意志 1936｜Iron Will 1936</title>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #12151a; touch-action: none; }
+    #unity-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: #12151a; outline: none; }
+    #loader { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+      color: #e6d5b2; font-family: "Noto Sans TC", "Microsoft JhengHei", serif;
+      background: radial-gradient(circle at 50% 38%, #2a313c, #111418 75%); }
+    #loader h1 { margin: 0; font-size: clamp(30px, 7.5vw, 58px); letter-spacing: 6px; color: #f2d48f; text-shadow: 0 3px 10px rgba(0,0,0,.85); }
+    #loader .sub { margin: 0; color: #b9c3cf; font-size: clamp(14px, 3vw, 18px); letter-spacing: 2px; }
+    #bar { width: min(72vw, 440px); height: 12px; border-radius: 6px; background: rgba(255,255,255,.12); border: 1px solid rgba(212,175,95,.35); overflow: hidden; }
+    #fill { width: 0; height: 100%; background: linear-gradient(90deg, #b88936, #f2d48f); transition: width .2s; }
+    #err { color: #ff8a80; max-width: 82vw; text-align: center; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="loader">
+    <h1>鋼鐵意志 1936</h1>
+    <p class="sub">IRON WILL 1936 ── 二戰大戰略指揮部載入中…</p>
+    <div id="bar"><div id="fill"></div></div>
+    <p id="err"></p>
+  </div>
+  <script>
+    var canvas = document.getElementById("unity-canvas");
+    var buildUrl = "Build";
+    var config = {
+      dataUrl: buildUrl + "/Web.data",
+      frameworkUrl: buildUrl + "/Web.framework.js",
+      codeUrl: buildUrl + "/Web.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "KevinChang",
+      productName: "鋼鐵意志 1936 Iron Will",
+      productVersion: "1.0",
+      matchWebGLToCanvasSize: true,
+      autoSyncPersistentDataPath: true,
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+    };
+    var script = document.createElement("script");
+    script.src = buildUrl + "/Web.loader.js";
+    script.onload = function () {
+      createUnityInstance(canvas, config, function (p) {
+        document.getElementById("fill").style.width = (p * 100) + "%";
+      }).then(function () {
+        document.getElementById("loader").style.display = "none";
+        canvas.focus();
+      }).catch(function (m) {
+        document.getElementById("err").textContent = "載入失敗：" + m;
+      });
+    };
+    document.body.appendChild(script);
+    document.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+    document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  </script>
+</body>
+</html>
